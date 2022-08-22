@@ -7,7 +7,7 @@
   "parser": "@babel/eslint-parser",
 
   "parserOptions": {
-    "ecmaVersion": 8,
+    // "ecmaVersion": 8,
     "requireConfigFile": false,
     "babelOptions": {
       "presets": ["@babel/preset-react"]
@@ -27,5 +27,10 @@
     "react-hooks/exhaustive-deps": "warn",
     "arrow-body-style": [0],
     "prefer-arrow-callback": [0]
+  },
+
+  "error": {
+    "namedComponents": ["function-declaration", "arrow-function"],
+    "unnamedComponents": "arrow-function"
   }
 }
