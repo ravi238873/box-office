@@ -6,6 +6,7 @@ import Details from '../components/shows/Details';
 import Seasons from '../components/shows/Seasons';
 import ShowMainData from '../components/shows/ShowMainData';
 import { getAPI } from '../misc/config';
+import { ShowPageWrapper, InfoBlock } from './Show.styled';
 
 const reducer = (prevState, action) => {
   switch (action.type) {
@@ -39,7 +40,7 @@ const Show = () => {
   useEffect(() => {
     let isMounted = true;
 
-    getAPI(`/shows/${id}?embed[]=episodes&embed[]=cast`)
+    getAPI(`/shows/${id}?embed[]=seasons&embed[]=cast`)
       .then(results => {
         if (isMounted) {
           dispatch({ type: 'FETCH_SUCCESS', show: results });
@@ -67,7 +68,7 @@ const Show = () => {
   }
 
   return (
-    <div>
+    <ShowPageWrapper>
       <ShowMainData
         image={show.image}
         name={show.name}
@@ -76,25 +77,25 @@ const Show = () => {
         tags={show.genres}
       />
 
-      <div>
+      <InfoBlock>
         <h2>Details</h2>
         <Details
           status={show.status}
           network={show.network}
-          premier={show.premier}
+          premiered={show.premiered}
         />
-      </div>
+      </InfoBlock>
 
-      <div>
+      <InfoBlock>
         <h2>Seasons</h2>
-        <Seasons seasons={show._embedded.episodes} />
-      </div>
+        <Seasons seasons={show._embedded.seasons} />
+      </InfoBlock>
 
-      <div>
+      <InfoBlock>
         <h2>Cast</h2>
         <Cast cast={show._embedded.cast} />
-      </div>
-    </div>
+      </InfoBlock>
+    </ShowPageWrapper>
   );
 };
 
