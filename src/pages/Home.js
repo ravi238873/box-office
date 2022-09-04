@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import ActorsGrid from '../components/actors/ActorsGrid';
 import CustomRadio from '../components/CustomRadio';
 import MainPageLayout from '../components/MainPageLayout';
@@ -10,6 +10,21 @@ import {
   SearchButtonWrapper,
   SearchInput,
 } from './Home.styled';
+
+const renderResult = results => {
+  if (results && results.length === 0) {
+    return <div>No Results Found</div>;
+  }
+
+  if (results && results.length > 0) {
+    return results[0].show ? (
+      <ShowGrid data={results} />
+    ) : (
+      <ActorsGrid data={results} />
+    );
+  }
+  return null;
+};
 
 const Home = () => {
   const [input, setInput] = useLastQuery();
@@ -24,9 +39,12 @@ const Home = () => {
     );
   };
 
-  const onInputChange = ev => {
-    setInput(ev.target.value);
-  };
+  const onInputChange = useCallback(
+    ev => {
+      setInput(ev.target.value);
+    },
+    [setInput]
+  );
 
   const onKeyDown = ev => {
     if (ev.keyCode === 13) {
@@ -39,21 +57,6 @@ const Home = () => {
   };
 
   console.log(searchOption);
-
-  const renderResult = () => {
-    if (results && results.length === 0) {
-      return <div>No Results Found</div>;
-    }
-
-    if (results && results.length > 0) {
-      return results[0].show ? (
-        <ShowGrid data={results} />
-      ) : (
-        <ActorsGrid data={results} />
-      );
-    }
-    return null;
-  };
 
   return (
     <MainPageLayout>
@@ -92,7 +95,7 @@ const Home = () => {
           Search
         </button>
       </SearchButtonWrapper>
-      {renderResult()}
+      {renderResult(results)}
     </MainPageLayout>
   );
 };
